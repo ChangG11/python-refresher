@@ -1,8 +1,12 @@
+import math
+import numpy as np
+
 G = 9.81  # universal gravity constant, 9.81 m/s^2
 density_water = 1000 # density of water is 1000 kg/m^3
 mass_of_auv = 100 # defaults to 100 Kg
 volume_of_auv = 0.1 # defaults to 0.1 m^3
 thruster_distance = 0.5 # defaults to 0.5 m
+inertia_of_AUV = 1 # defaults to 1 kg * m^2
 
 
 def calculate_buoyancy(
@@ -63,4 +67,14 @@ def calculate_moment_of_inertia(m, r):
     return moment_of_inertia
 
 def calculate_auv_acceleration(F_magnitude, F_angle):
+    F_x = F_magnitude * np.cos(F_angle)
+    F_y = F_magnitude * np.sin(F_angle)
+    a_x = F_x / mass_of_auv
+    a_y = F_y / mass_of_auv
+    acceleration_of_auv = np.sqrt(a_x**2 + a_y**2)
     return acceleration_of_auv
+
+def calculate_auv_angular_acceleration(F_magnitude, F_angle): # angaccel = torque / moment of inertia, torque = distance from axis of rotation * force applied, moment of inertia = mass * distance ^2
+    torque = thruster_distance * calculate_auv_acceleration(F_magnitude, F_angle)
+    angular_acceleration = torque / inertia_of_AUV
+    return angular_acceleration
