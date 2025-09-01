@@ -9,6 +9,7 @@ volume_of_auv = 0.1 # defaults to 0.1 m^3
 # inertia_of_AUV = 1 # defaults to 1 kg * m^2
 
 
+
 def calculate_buoyancy(
     v, density_fluid
 ):  # v should be iin m^3, density should be in kg/m^3, G is gravity = 9.81 m/s^2
@@ -80,7 +81,10 @@ def calculate_auv_angular_acceleration(F_magnitude, F_angle, inertia = 1.0, thru
     return angular_acceleration
 
 
-def calculate_auv2_acceleration(T, alpha, theta, mass = 100.0):
+def calculate_auv2_acceleration(T, alpha, theta, mass = 100.0): # [[cos, -sin],[sin, cos]]
+
+    T.matmul[[math.cos(theta), math.sin(-theta)],[math.sin(theta), math.cos(theta)]]
+    
     cos_alpha = math.cos(alpha)
     sin_alpha = math.sin(alpha)
 
@@ -89,6 +93,8 @@ def calculate_auv2_acceleration(T, alpha, theta, mass = 100.0):
 
     a_x = F_x / mass
     a_y = F_y / mass
+
+
     return (a_x, a_y)
 
 def calculate_auv2_angular_acceleration(T, alpha, L, l, inertia):
@@ -98,4 +104,4 @@ def calculate_auv2_angular_acceleration(T, alpha, L, l, inertia):
     return angular_acceleration
 
 def simulate_auv2_motion(T, alpha, L, l, mass = 100.0, inertia = 100.0, dt = .1, t_final = 10.0, x0 = 0.0, y0 = 0.0, theta0 = 0.0):
-    pass
+    
